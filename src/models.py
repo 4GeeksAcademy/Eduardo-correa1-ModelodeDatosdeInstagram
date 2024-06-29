@@ -9,18 +9,14 @@ Base = declarative_base()
 
 class Usuarios(Base):
     __tablename__ = 'usuarios'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     username = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
     password = Column(String(250), nullable=False)
     bio = Column(String(250), nullable=False)
-    comentarios = relationship("Comentarios", backref = "usuarios",lazy = True)
-    post = relationship("Post", backref = "usuarios",lazy = True)
-      
-
-
+    comentarios = relationship("Comentarios", backref="usuario", lazy=True)
+    posts = relationship("Post", backref="usuario", lazy=True)
+    likes = relationship("Likes", backref="usuario", lazy=True)
 
 class Post(Base):
     __tablename__ = 'post'
@@ -29,20 +25,20 @@ class Post(Base):
     image_url = Column(String(250), nullable=False)
     fecha = Column(DateTime, nullable=False)
     user_id = Column(Integer, ForeignKey('usuarios.id'))
-
+    comentarios = relationship("Comentarios", backref="post", lazy=True)
+    likes = relationship("Likes", backref="post", lazy=True)
 
 class Comentarios(Base):
     __tablename__ = 'comentarios'
     id = Column(Integer, primary_key=True)
-    contenido = Column(String(250), nullable=False)    
+    contenido = Column(String(250), nullable=False)
     fecha = Column(DateTime, nullable=False)
     user_id = Column(Integer, ForeignKey('usuarios.id'))
     post_id = Column(Integer, ForeignKey('post.id'))
 
-
 class Likes(Base):
     __tablename__ = 'likes'
-    id = Column(Integer, primary_key=True)    
+    id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('usuarios.id'))
     post_id = Column(Integer, ForeignKey('post.id'))
     
