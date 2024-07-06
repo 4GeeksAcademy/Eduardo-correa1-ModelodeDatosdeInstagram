@@ -7,6 +7,12 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
+seguir = Table("seguir", Base.metadata,
+               Column("seguidor_id", Integer, ForeignKey("usuarios.id"), primary_key=True),
+               Column('seguido_id', Integer, ForeignKey('usuarios.id'), primary_key=True)
+
+)
+
 class Usuarios(Base):
     __tablename__ = 'usuarios'
     id = Column(Integer, primary_key=True)
@@ -17,6 +23,12 @@ class Usuarios(Base):
     comentarios = relationship("Comentarios", backref="usuario", lazy=True)
     posts = relationship("Post", backref="usuario", lazy=True)
     likes = relationship("Likes", backref="usuario", lazy=True)
+    seguidores = relationship("usuarios",
+                              secondary=seguir,
+                              primaryjoin=id==seguir.c.seguidor_id,
+                              secondaryjoin=id==seguir.c.seguido_id,
+                              backref='seguidos'
+                              )
 
 class Post(Base):
     __tablename__ = 'post'
