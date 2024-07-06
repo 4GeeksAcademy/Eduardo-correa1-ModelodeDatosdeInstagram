@@ -1,6 +1,6 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Table
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import create_engine
 from eralchemy2 import render_er
@@ -34,7 +34,7 @@ class Post(Base):
     __tablename__ = 'post'
     id = Column(Integer, primary_key=True)
     contenido = Column(String(250), nullable=False)
-    image_url = Column(String(250), nullable=False)
+    image_url = Column(String(250), nullable=False)    
     fecha = Column(DateTime, nullable=False)
     user_id = Column(Integer, ForeignKey('usuarios.id'))
     comentarios = relationship("Comentarios", backref="post", lazy=True)
